@@ -17,22 +17,37 @@ Actual switcher on a plain background; appearance depends on your icon theme.
 | --- | --- |
 | Alt+Tab | Open the switcher / select the next app |
 | Alt+Shift+Tab | Select the previous app |
-| Release Alt | Activate the selected app |
-| Left / Right | Move the selection while open |
-| Enter | Activate the selected app |
+| Alt + backtick (&#96;) | Open / cycle through windows of the current app |
+| Alt + Shift + backtick | Cycle windows backwards |
+| Down | Show the selected app's window list |
+| Up / Down in the list | Select a window |
+| Release Alt / Enter | Activate the selected window |
+| Left / Right / Tab | Change apps and close the window list |
 | Escape | Cancel and keep the current focus |
 | Hover / click | Select / activate an app |
+| Click a count badge | Show that app's window list |
 
 - Groups windows by desktop application across workspaces and monitors.
+- A small count badge appears only for apps with multiple windows. Down reveals
+  their titles and workspaces; choose with Up/Down or click a window. Long lists
+  scroll, with up to five rows visible at once.
 - Orders applications by recent focus and activates the selected app's most
-  recently used surviving window. Browsing the strip keeps that order fixed.
+  recently used surviving window unless you choose another. Browsing the strip
+  keeps that order fixed. Chrome profiles share an icon; their window titles
+  and workspaces distinguish the windows.
 - Uses installed desktop entries for app names and system icons, with a fallback
   for unknown applications.
-- Removes closed windows while open; takes a fresh snapshot on the next opening.
+- Removes closed windows and updates titles/workspaces while open. If the chosen
+  window closes, selection falls back to a surviving window. Newly opened windows
+  appear in the next snapshot, when you reopen the switcher.
 - Centers on the focused monitor. Icons shrink and the row scrolls when needed.
 - Uses 80 px icons, rounded dark material, and a soft shadow. Background blur
   follows the compositor's blur setting. Labels use UbuntuMono Nerd Font when
   installed, otherwise Qt's font fallback.
+
+![Window picker showing two Chrome windows](docs/windows.png)
+
+Window picker rendered with example titles.
 
 ## Requirements
 
@@ -56,8 +71,9 @@ dofile(os.getenv("HOME") .. "/.config/omarchy/plugins/zc.app-switcher/hyprland.l
 ```
 
 The plugin ID is `zc.app-switcher`; Omarchy uses that ID for its install folder.
-The Lua file replaces the default Alt+Tab and Alt+Shift+Tab bindings, listens for
-Alt release, and configures the switcher's layer. Then apply and check:
+The Lua file replaces the default Alt+Tab and Alt+Shift+Tab bindings, adds Alt +
+backtick and Alt + Shift + backtick, listens for Alt release, and configures the
+switcher's layer. Then apply and check:
 
 ```sh
 hyprctl reload
@@ -106,9 +122,10 @@ omarchy plugin validate .
 luac -p hyprland.lua
 ```
 
-The model checks cover application grouping, desktop identity aliases, recent
-window selection, unknown apps, closing windows, empty/single-app lists, and
-reverse wraparound. These checks do not replace a live desktop test.
+The model checks cover application grouping, desktop identity aliases, window
+metadata, app/window navigation, ordered mixed inputs, preserving selection when
+windows close, and empty/single-app lists. These checks do not replace a live
+desktop test.
 
 The running plugin exposes IPC calls for a manual check:
 
@@ -118,8 +135,11 @@ omarchy-shell zc-app-switcher state
 omarchy-shell zc-app-switcher cancel
 ```
 
-Before releasing, also check physical Alt+Tab and Alt+Shift+Tab, fast Alt release,
-Escape, Enter, multiple workspaces, and closing a selected window.
+`nextWindow`, `previousWindow`, and `showWindows` are also available through IPC.
+
+Before releasing, also check physical Alt+Tab, Alt + backtick (and their Shift
+variants), Down/Up, fast Alt release, Escape, Enter, multiple workspaces, and
+closing a selected window.
 
 ## License
 

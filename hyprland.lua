@@ -4,6 +4,10 @@ hl.unbind("ALT + TAB")
 hl.unbind("ALT + SHIFT + TAB")
 o.bind("ALT + TAB", "Next application", hl.dsp.event("zc-app-switcher:next"))
 o.bind("ALT + SHIFT + TAB", "Previous application", hl.dsp.event("zc-app-switcher:previous"))
+hl.unbind("ALT + grave")
+hl.unbind("ALT + SHIFT + grave")
+o.bind("ALT + grave", "Next window of current application", hl.dsp.event("zc-app-switcher:window-next"))
+o.bind("ALT + SHIFT + grave", "Previous window of current application", hl.dsp.event("zc-app-switcher:window-previous"))
 
 -- Send modifier releases through the same ordered IPC stream as the first Tab.
 -- This also handles taps released before the overlay acquires keyboard focus.

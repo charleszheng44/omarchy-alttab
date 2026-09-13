@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "zc.app-switcher",
   "name": "Omarchy AltTab",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": "charleszheng44",
   "description": "A compact macOS-style Alt+Tab application switcher.",
   "kinds": ["service"],
